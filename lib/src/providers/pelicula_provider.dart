@@ -10,15 +10,21 @@ class PeliculaProvider {
   String _language = 'es-ES';
 
   Future<List<PeliculaModel>> getEnCines() async {
-    final url = Uri.https(_url, '3/movie/now_playing', {
+    return _getPeliculas('3/movie/now_playing');
+  }
+
+  Future<List<PeliculaModel>> getPopulares() async {
+    return _getPeliculas('3/movie/popular');
+  }
+
+  Future<List<PeliculaModel>> _getPeliculas(String partUrl) async {
+    final url = Uri.https(_url, partUrl, {
       'api_key': _apiKey,
       'language': _language,
     });
-
     final resp = await http.get(url);
     final decodedData = json.decode(resp.body);
     final peliculas = new PeliculasModel.fromJsonList(decodedData['results']);
-
     return peliculas.items;
   }
 }
