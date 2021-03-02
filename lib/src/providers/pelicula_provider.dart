@@ -13,6 +13,7 @@ class PeliculaProvider {
   String _language = 'es-ES';
 
   int _popularesPage = 0;
+  bool _cargando = false;
 
   List<PeliculaModel> _populares = new List();
 
@@ -34,11 +35,16 @@ class PeliculaProvider {
   }
 
   Future<List<PeliculaModel>> getPopulares() async {
+    if (_cargando) return [];
+
+    _cargando = true;
     _popularesPage++;
 
+    print("Cargando siguientes...");
     final resp = await _getPeliculas('3/movie/popular', _popularesPage);
     _populares.addAll(resp);
     popularesSink(_populares);
+    _cargando = false;
     return resp;
   }
 
