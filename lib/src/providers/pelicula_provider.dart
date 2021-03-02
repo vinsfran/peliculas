@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import 'dart:convert';
@@ -9,19 +12,39 @@ class PeliculaProvider {
   String _url = 'api.themoviedb.org';
   String _language = 'es-ES';
 
+  int _popularesPage = 0;
+
+  List<PeliculaModel> _populares = new List();
+
+  final _popularesStreamController =
+      StreamController<List<PeliculaModel>>.broadcast();
+
+  Function(List<PeliculaModel>) get popularesSink =>
+      _popularesStreamController.sink.add;
+
+  Stream<List<PeliculaModel>> get popularesStream =>
+      _popularesStreamController.stream;
+
+  void disposeStreams() {
+    _popularesStreamController?.close();
+  }
+
   Future<List<PeliculaModel>> getEnCines() async {
-    return _getPeliculas('3/movie/now_playing');
+    return _getPeliculas('3/movie/now_playing', 1);
   }
 
   Future<List<PeliculaModel>> getPopulares() async {
-    return _getPeliculas('3/movie/popular');
+    _popularesPage++;
+
+    final resp = await _getPeliculas('3/movie/popular', _popularesPage);
+    _populares.addAll(resp);
+    popularesSink(_populares);
+    return resp;
   }
 
-  Future<List<PeliculaModel>> _getPeliculas(String partUrl) async {
-    final url = Uri.https(_url, partUrl, {
-      'api_key': _apiKey,
-      'language': _language,
-    });
+  Future<List<PeliculaModel>> _getPeliculas(String partUrl, int _page) async {
+    final url = Uri.https(_url, partUrl,
+        {'api_key': _apiKey, 'language': _language, 'page': _page.toString()});
     final resp = await http.get(url);
     final decodedData = json.decode(resp.body);
     final peliculas = new PeliculasModel.fromJsonList(decodedData['results']);
