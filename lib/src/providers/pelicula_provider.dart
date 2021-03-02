@@ -30,7 +30,7 @@ class PeliculaProvider {
   }
 
   Future<List<PeliculaModel>> getEnCines() async {
-    return _getPeliculas('3/movie/now_playing', 1);
+    return await _getPeliculas('3/movie/now_playing', 1);
   }
 
   Future<List<PeliculaModel>> getPopulares() async {
