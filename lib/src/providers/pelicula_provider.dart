@@ -40,7 +40,6 @@ class PeliculaProvider {
     _cargando = true;
     _popularesPage++;
 
-    print("Cargando siguientes...");
     final resp = await _getPeliculas('3/movie/popular', _popularesPage);
     _populares.addAll(resp);
     popularesSink(_populares);
