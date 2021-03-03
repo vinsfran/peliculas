@@ -14,6 +14,7 @@ class PeliculasModel {
 }
 
 class PeliculaModel {
+  String uniqueId;
   int voteCount;
   int id;
   bool video;
