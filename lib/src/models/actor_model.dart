@@ -1,5 +1,5 @@
 class ActoresModel {
-  List<ActorModel> actores = new List();
+  List<ActorModel> items = new List();
 
   ActoresModel();
 
@@ -8,7 +8,7 @@ class ActoresModel {
 
     jsonList.forEach((item) {
       final actor = ActorModel.fromJsonMap(item);
-      actores.add(actor);
+      items.add(actor);
     });
   }
 }
