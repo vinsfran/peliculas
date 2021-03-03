@@ -1,5 +1,5 @@
 class PeliculasModel {
-  List<PeliculaModel> items = new List();
+  List<PeliculaModel> peliculas = new List();
 
   PeliculasModel();
 
@@ -8,7 +8,7 @@ class PeliculasModel {
 
     for (var item in jsonList) {
       final peliculaModel = new PeliculaModel.fromJsonMap(item);
-      items.add(peliculaModel);
+      peliculas.add(peliculaModel);
     }
   }
 }
